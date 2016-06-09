@@ -6,7 +6,7 @@
 		<relativePath>../</relativePath>
 		<groupId>net.sf.uadetector</groupId>
 		<artifactId>uadetector-parent</artifactId>
-		<version>2014.11-SNAPSHOT</version>
+		<version>2016.06.06</version>
 	</parent>
 
 	<artifactId>distribution</artifactId>
@@ -16,19 +16,19 @@
 
 	<packaging>pom</packaging>
 
-	<!-- NOTE: These dependency declarations are only required to sort this project to the end of the line in the multimodule 
-		build. Since we only include the uadetector-core and uadetector-resources module in our assembly, we only need to ensure 
+	<!-- NOTE: These dependency declarations are only required to sort this project to the end of the line in the multimodule
+		build. Since we only include the uadetector-core and uadetector-resources module in our assembly, we only need to ensure
 		this distribution project builds AFTER that one... -->
 	<dependencies>
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-core</artifactId>
-			<version>0.9.23-SNAPSHOT</version>
+			<version>2016.06.06</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-resources</artifactId>
-			<version>2014.11-SNAPSHOT</version>
+			<version>2016.06.06</version>
 		</dependency>
 	</dependencies>
 
