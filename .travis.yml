@@ -1,6 +1,71 @@
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - curl
+
 language: java
+
 jdk:
-  - oraclejdk7
   - oraclejdk8
-  - openjdk6
-  - openjdk7
+
+cache:
+  directories:
+    - $HOME/.m2
+
+# Don't build branches/tags that match this regex. It's the convention used
+# for tagging releases, which should be already tested before tagging.
+branches:
+  except:
+    - /^v[0-9]/
+
+env:
+  global:
+    # When uadetector gets merged against upstream, these version numbers should
+    # be changed to match those in pom.xml
+    - MAJOR_VERSION=2014
+    - MINOR_VERSION=11
+
+    - SWOOP_RELEASE_BRANCH=master
+    - PADDED_TRAVIS_BUILD_NUMBER=$(printf "%03d" $TRAVIS_BUILD_NUMBER)
+    - SWOOP_PROJECT_VERSION="$MAJOR_VERSION.$MINOR_VERSION-swoop$PADDED_TRAVIS_BUILD_NUMBER"
+
+    - secure: "FZOkr9G1sbyzMMQxVVlndjv+dKSg6QirqrTGGPeLYXFsBOjOs2X5mZ+/LqmdGhpE5z5RyAYsb08r840FypW2bGaR8syMooZGV0j9vtupPA9a2o6CgGY/3NjFx7xjOB9wXtF5/DH6o3HrF7mc4gIpVZykUUYmRZYMVqcIyBbLbBw3Verof3mrC1I7OBXz+zCYoV8Mrexvk7Dc7eXJqTCzdeeiXtk9r9KgA8Bf/2qB7809Lq0aIfIfqs2xVmqORUn89sGSPXIJ6X68YR/r94wn3g5R8lTX0F14iqpayze5MYvlOBl/ggi+DEAExtNbAK11KfYl0WETlMkiGgaTOG4ducKGoxrj3/NfncPGEevHXEUsEsFuIfjwzTy79MkAO32K8OHDbDROUIjSUDM+BexXaZZAAfwitojwAhBkARiWDI/7Dd26Nh5TwAhXMk4lOthzBE9nJXr/1UShZv2sCKWuVriPOgB8Jrf/89TrNP1ZhoHCEuY8OVQPWHHTpvAqeAVNdfpdij7MFlU6D0cYNtLHs66HPFzcW57X2KefGVNwKYMNCXodn/pUie1zsi9F7BjDNaGBs8uiVLj2uaQaa4Pb7An4XEzy1sdmRvi/CDMIlbgaIz82QvnzXFQvTzX88ziSOwABCeuzZ+Z03nu8e/jJ9vF/K58SBhbYb6J65pUxMmc="
+    - secure: "MeHPBTvf/7H2E96Lhf8CC8T+nK0k3m3ziew5Q88Fx+pdmkIMAx5RFdUyr2EfYRzwb1NdWbzoKKloEjRkGZqNGX8RDw4Vj1LALwp0gEWl/y3xl/uDZpnTgRlGpDF4zdfv4By7hum52yEPbKtx5kz+O6okULER4Ey6sBzyUysJ+xXAqaQEyEb1X4dKxJVMP5qjfNtnV+vrE1BfG2mXZBI1ILxE1cqoZn8kZAWjK4wLbMnacoA8LkjzmYfMn5SluuwkNOjwQltJGBdOLsQGEOxY7uhr7uVJSgVhqbqPOmKiD1b+CPr72IynrwVY/zYRU8J0mRqAUZ9A5YM19Sy8by5v40Jt8KNPOkIi1A8O2Xys05IAtGg4Bq+LTxBIjouubJH0gNeP1gK/zEhkrj9RYEIW53s7EucMdmjg5ZI4buWyl01RmURDq7adeRARZZIUBP2AqhnFmtkb2jvIXsYFFeyJacWLbd81cnLAZNV+ox+ovUeDnkI7QnCfOB0VFSYmw3NyN1SXg4TX/oXfmWOxVlXi2VUwQjvhe7tLNBRLOSEk2ZpKFhk2PaKNdfRRfxs51WGV73MCr7iornpQ1Xsj+JaesPKkCRLvudK0LfmPH4Hu4jW2PgYA/4ctRYK4w2QbtZOelcvqC5scbu7nftapjwvpAFEHt5HtWs78FepOCBhfwt8="
+    - secure: "mWMk3AvEoV50lhWQYuqjVJHabSGhdmLRW32SKnNN2mHy83Gmos15TMQoFkuBiI4deqmNjizaz8V7CIn1t9GhT8yW8tN7tiwOE+ksjZ2uI8JrO5jO0hphOHhdCVyl+7AReTsG1c2B3iyAFrvj1HthOCn4T5o4kX7jb2XlWhLCGutCjIB/F61Cyq45AXhBN5Z6Opi4GuePC81rqSZmZpFcmRqIgx7wNuLhXPo3fxflw798/f+JkO3+7asDFch/G3ock2Sifa7mFTCOYmJmZO5mFKGiIDpRPRy8AIH16U+h+GqeOsU4xA5wnXWZClnVdD65Tk5F03CsreNPvXnsWrCjBix8FGOyqhhZYPWpi524andfPV6H6VOZsFRS4TB9hgqvQttqhYbgbtkdPFPAuymVzqaSzI9PdPVTtCjvFupVJAeC8dDWJ+t0J7/gZx6yn+o2cbti6ldvuJgCmrYjk37Ucd12U2CkH0ky3NTLV+yogxT9u6WiV5D1bZ0IpHkqA3Dnl8yZd93E0sC1webSuiU5gowkFkC1ih0ihQKFDDAg3kve2qklG4xAaHiqQSS8zwgsg5CwmL59q00nvJycUViLDI5/GT6A6Au/ByLsGvuESRg9zJwY2++Q6dksOau7xGKqleTjmNlBIHqNr6VSLkG8mrG8foL9Es9KRFKU8HeUF8A="
+    - secure: "gLpEdWfVlUaX8alLjGfWBfXfNKeWlfrxulXw9iWV+4+R57BYzB5Cn4ZzaetSVbAbK/163Ezi7FTRvayrFEUbvLSjhnhaXrXgrWBCJ8GQd2tAZdzhB2vkEVTHz41P8heNqfMoiRUBUkjQGpdlPfUN4EZCC4tl7Ng+HM1hOlhjDuLO5H5dJMPP+V32rylomdZ85YHbv8kkr/pG5Yv3OUuRlaTpbyDxHgb3SnsfUJvNvm6uVdh8zfH5DsyGcBB+pcUKtQLaXBuThL3fdJLmmGfwLbxk9MwNART/gQhSQMshU32KrKQKkSD45NSqKMkTfedQAPB95J76rYsEPDzWu1EB3D5edFddVpls5tBtH0fh6zWcxZLxr/ySRM3zX2vigErKjSD8ctLxarXYi/2+p9IaOnLnO9NjWMnMeI4FMgJ4UbtmQcEbZ6R7VnvNDCkurv/WodYTnYqTod3muxcX/xoJiqC3tbTt1F6iYlDipKZErocN3ZRNFznXO4WcMh+K5W6JlMSSe2E7NFVkgbqLZ5E1+IdAcBklN3ZfZGsFmqaxXSiS7uabqKnrrQLNHv6VTFSgNesA1BGHmVGVp7bxUdSCpodcxKsF2zIGM2/HJU0lbQvGrSSdZaOtYTxwnc7Xq+UbzhSFHg/K99pcBHZwz7ZODG3QGLTBhBVCaUINZXo6bPk="
+    - secure: "WvVuFPLztz5DteEBgYxNOi5KF8lnLwjz9dE77T631XALlgaJdYPuhQSGXd1vGtoBVkNBVxJwUgUmVduAiLD1dfMfoHU+lhebRw+z2nQ4EZGRBx4djyfPmYIv7IU6d/QbT15y6iwfRiQjAOR58oj9TbEcIYgR4HmZhNSPna2hZBrxfij4+DHX95d8AzlA59/yckeXVE9qxqV3+ukMmBXlA5weIHsAisZKziivGiMsnWCNo/UPkBYm24vem/uxKR2Gt6hI3KBxjYKelRVil+LKcb1E80wrZJALpsiGSDmE1NCHc9rkfE3Z4Qm5v8RYmk4wSRwneJRn0cmOQZWjg/LveJ1ogJUK0Lxe8SJ+AzAMYyF+3H7Q003kpnDfEQbHgaDiMqH4U3XMaNaht+P3cYAfKEk5TNih20kzLqGVGus9JcUWYeHMfmF2kgiFNSzlhwaJy+cZOXOYM4PskxucVZPIy6GuUdKKZSQEw83ZTwJXsKyb6ioQ4CIj0LKPQO+oVB2AUgqbgSwp4jHaGIfhy43r2DOkzyjVDgehXRaSXS0943/P53ERChSCb1KueMhr0WXk1vnUb9Hs+BidquwAgnENlfEZg2DtZS7mjXuyeFbvr6SP+RWQHGFEFhpz4SGf/9L4exNli9sHx4FiQsqll+DRFD3GrXhmvt5oerrpv/utg0M="
+
+before_install:
+  - wget https://s3.amazonaws.com/swoop-maven/settings.xml -O $HOME/.m2/settings.xml
+
+# Set the Maven version to have the minor version be the Travis build number
+before_script:
+  - >
+    if [ ${TRAVIS_BRANCH} = ${SWOOP_RELEASE_BRANCH} ]
+      then mvn versions:set -DnewVersion=${SWOOP_PROJECT_VERSION}
+      else mvn versions:set -DnewVersion=${SWOOP_PROJECT_VERSION}-SNAPSHOT
+    fi
+
+script: mvn verify
+
+##
+# Deployment to S3 bucket
+##
+
+after_success:
+  # Maven deployments will always happen, but commits to anywhere other than
+  # the designated release branch will be snapshot releases.
+  - mvn -DskipTests=true deploy
+
+  # On the specified release branch only, we'll tag in GitHub.
+  - >
+    [ ${TRAVIS_PULL_REQUEST} = 'false' -a ${TRAVIS_BRANCH} = ${SWOOP_RELEASE_BRANCH} ] &&
+    curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_TOKEN}" -X POST "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" -d '{
+      "tag_name": "v'"${SWOOP_PROJECT_VERSION}"'",
+      "target_commitish": "'"${TRAVIS_COMMIT}"'",
+      "name": "v'"${SWOOP_PROJECT_VERSION}"'",
+      "body": "https://travis-ci.com/'"${TRAVIS_REPO_SLUG}"'/builds/'"${TRAVIS_BUILD_ID}"'",
+      "prerelease": false
+    }'
