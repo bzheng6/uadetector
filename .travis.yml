@@ -24,8 +24,8 @@ env:
   global:
     # When uadetector gets merged against upstream, these version numbers should
     # be changed to match those in pom.xml
-    - MAJOR_VERSION=2014
-    - MINOR_VERSION=11
+    - MAJOR_VERSION=2016
+    - MINOR_VERSION=06.06
 
     - SWOOP_RELEASE_BRANCH=master
     - PADDED_TRAVIS_BUILD_NUMBER=$(printf "%03d" $TRAVIS_BUILD_NUMBER)
